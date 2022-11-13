@@ -19,6 +19,14 @@
  */
 package org.ivanchuk;
 
-public interface Source {
+import java.io.InputStream;
 
+/**
+ * The source for {@link Page}
+ * */
+public interface Source {
+  /**
+   * @return Input stream
+   */
+  InputStream get();
 }

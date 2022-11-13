@@ -22,12 +22,12 @@ package org.ivanchuk;
 public class DefaultPage implements Page {
 
   @Override
-  public Page from(Source src) {
+  public final Page from(final Source src) {
     throw new IllegalStateException("Not implemented!");
   }
 
   @Override
-  public Page with(Param param) {
+  public final Page with(final Param param) {
     throw new IllegalStateException("Not implemented!");
   }
 }

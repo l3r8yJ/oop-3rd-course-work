@@ -26,7 +26,7 @@ class DefaultPageTest {
 
   @Test
   final void from() {
-    final Source src = new Source() {};
+    final Source src = () -> null;
     final Page page = new DefaultPage();
     Assertions.assertThrows(IllegalStateException.class, () -> page.from(src));
   }
