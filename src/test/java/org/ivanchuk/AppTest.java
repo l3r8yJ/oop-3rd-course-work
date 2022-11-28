@@ -17,27 +17,39 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+
 package org.ivanchuk;
 
+import com.jcabi.http.request.JdkRequest;
+import com.jcabi.http.response.RestResponse;
+import java.io.IOException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-class DefaultPageTest {
+class AppTest {
+  private static final int PORT = 3232;
 
   @Test
-  final void from() {
-    final Source src = () -> null;
-    final Page page = new DefaultPage();
-    Assertions.assertThrows(IllegalStateException.class, () -> page.from(src));
-  }
+  final void applicationWorks() throws Exception {
 
-  @Test
-  void with() {
-    final Param param =
-        (key, value) -> {
-          throw new IllegalStateException("Not implemented!");
-        };
-    final Page page = new DefaultPage();
-    Assertions.assertThrows(IllegalStateException.class, () -> page.with(param));
+    final Thread thread =
+        new Thread(
+            () -> {
+              final App app = new App(AppTest.PORT);
+              try {
+                app.start();
+              } catch (final IOException exception) {
+                throw new IllegalStateException(exception);
+              }
+            });
+    thread.setDaemon(true);
+    thread.start();
+    final String response =
+        new JdkRequest("http://localhost:3232")
+            .fetch()
+            .as(RestResponse.class)
+            .body();
+    thread.join();
+    Assertions.assertEquals(response, "Hello, friend!");
   }
 }

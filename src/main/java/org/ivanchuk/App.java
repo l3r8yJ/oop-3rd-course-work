@@ -17,16 +17,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+
 package org.ivanchuk;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.ServerSocket;
+import java.net.Socket;
 
-/**
- * The source for {@link Page}
- * */
-public interface Source {
-  /**
-   * @return Input stream
-   */
-  InputStream get();
+class App {
+
+  private final int port;
+
+  App(final int prt) {
+    this.port = prt;
+  }
+
+  public void start() throws IOException {
+    final ServerSocket server = new ServerSocket(this.port);
+    final Socket socket = server.accept();
+    final InputStream input = socket.getInputStream();
+    final OutputStream output = socket.getOutputStream();
+    output.write("HTTP/1.1 200 OK\r\n\r\nHello, friend!".getBytes());
+    final byte[] buffer = new byte[10000];
+    input.read(buffer);
+    input.close();
+    output.close();
+    server.close();
+  }
 }
